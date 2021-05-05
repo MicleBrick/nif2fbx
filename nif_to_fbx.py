@@ -41,13 +41,14 @@ def try_fix_lod():
         return
     
     main_child = scene_node.children[0]
-    apply_transform(main_child)
+    apply_transform(main_child, False)
+    main_child.rotation_euler = Euler((0, 0, 0), 'XYZ')
 
     if len(main_child.children) < 3:
         return
     
     for i, child in enumerate(list(main_child.children[:3])):
-        apply_transform(child)
+        apply_transform(child, True)
 
         # https://blender.stackexchange.com/a/47769
         bpy.ops.object.select_all(action='DESELECT')
@@ -69,10 +70,10 @@ def try_fix_lod():
             target.name = "imported_LOD" + str(i)
 
 
-def apply_transform(obj):
+def apply_transform(obj, rot):
     active = bpy.context.view_layer.objects.active
     bpy.context.view_layer.objects.active = obj
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=False)
+    bpy.ops.object.transform_apply(location=True, rotation=rot, scale=False)
     bpy.context.view_layer.objects.active = active
 
 
