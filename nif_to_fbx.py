@@ -13,6 +13,8 @@ argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 
 for filepath in glob.glob(argv[0]):
+    print("Processing " + filepath)
+
     # delete default scene
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete(use_global=False, confirm=False)
@@ -23,8 +25,8 @@ for filepath in glob.glob(argv[0]):
     # change LOD_ to LOD
     bpy.ops.object.select_all(action='SELECT')
     for obj in bpy.context.selected_objects:
-        if obj.name.startswith("LOD_"):
-            obj.name = obj.name.replace("LOD_", "LOD")
+        if len(obj.name) > 3 and obj.name[:-1].lower().endswith("lod_"):
+            obj.name = "LOD" + obj.name[-1]
 
     # export fbx file
     bpy.ops.export_scene.fbx(filepath=str(Path(filepath).with_suffix(".fbx")),
