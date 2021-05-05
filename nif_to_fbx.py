@@ -21,9 +21,9 @@ for filepath in glob.glob(argv[0]):
     bpy.ops.import_scene.nif(filepath=filepath, scale_correction=0.5)
 
     # change LOD_ to LOD
-    sel_objs = [obj for obj in bpy.context.selected_objects if obj.name.startswith("LOD_")]
-    for obj in sel_objs:
-        obj.name = obj.name.replace("LOD_", "LOD")
+    for obj in bpy.context.selected_objects:
+        if obj.name.startswith("LOD_"):
+            obj.name = obj.name.replace("LOD_", "LOD")
 
     # export fbx file
     bpy.ops.export_scene.fbx(filepath=str(Path(filepath).with_suffix(".fbx")),
