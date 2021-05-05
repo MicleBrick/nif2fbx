@@ -5,6 +5,7 @@ import math
 
 from pathlib import Path
 from io_scene_niftools.modules.nif_import.property import texture
+from mathutils import Euler, Matrix
 
 def main():
     # hacky fix for error
@@ -40,11 +41,14 @@ def try_fix_lod():
         return
     
     main_child = scene_node.children[0]
+    apply_transform(main_child)
 
     if len(main_child.children) < 3:
         return
     
     for i, child in enumerate(list(main_child.children[:3])):
+        apply_transform(child)
+
         # https://blender.stackexchange.com/a/47769
         bpy.ops.object.select_all(action='DESELECT')
         bpy.context.view_layer.objects.active = child
@@ -63,6 +67,13 @@ def try_fix_lod():
                 target.parent = child.parent
                 bpy.data.objects.remove(child, do_unlink=True)
             target.name = "imported_LOD" + str(i)
+
+
+def apply_transform(obj):
+    active = bpy.context.view_layer.objects.active
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=False)
+    bpy.context.view_layer.objects.active = active
 
 
 main()
