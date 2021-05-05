@@ -21,6 +21,7 @@ for filepath in glob.glob(argv[0]):
     bpy.ops.import_scene.nif(filepath=filepath, scale_correction=0.5)
 
     # change LOD_ to LOD
+    bpy.ops.object.select_all(action='SELECT')
     for obj in bpy.context.selected_objects:
         if obj.name.startswith("LOD_"):
             obj.name = obj.name.replace("LOD_", "LOD")
