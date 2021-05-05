@@ -59,8 +59,9 @@ def try_fix_lod():
             target = bpy.context.selected_objects[0]
             bpy.context.view_layer.objects.active = target
             bpy.ops.object.join()
-            target.parent = child.parent
-            bpy.data.objects.remove(child, do_unlink=True)
+            if target != child:
+                target.parent = child.parent
+                bpy.data.objects.remove(child, do_unlink=True)
             target.name = "imported_LOD" + str(i)
 
 
