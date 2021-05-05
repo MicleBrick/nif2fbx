@@ -26,7 +26,7 @@ for filepath in glob.glob(argv[0]):
     bpy.ops.object.select_all(action='SELECT')
     for obj in bpy.context.selected_objects:
         if len(obj.name) > 3 and obj.name[:-1].lower().endswith("lod_"):
-            obj.name = "LOD" + obj.name[-1]
+            obj.name = "imported_LOD" + obj.name[-1]
 
     # export fbx file
     bpy.ops.export_scene.fbx(filepath=str(Path(filepath).with_suffix(".fbx")),
