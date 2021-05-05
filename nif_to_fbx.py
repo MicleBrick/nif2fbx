@@ -39,10 +39,16 @@ def try_fix_lod():
 
     if len(scene_node.children) < 1:
         return
-    
-    main_child = scene_node.children[0]
-    apply_transform(main_child, False)
-    main_child.rotation_euler = Euler((0, 0, 0), 'XYZ')
+
+    first_child = scene_node.children[0]
+    if first_child.name.startswith("loc_"):
+        main_child = scene_node.children[1]
+        main_child.location = first_child.location
+        main_child.rotation_euler = first_child.rotation_euler
+    else:
+        main_child = first_child
+        apply_transform(main_child, False)
+        main_child.rotation_euler = Euler((0, 0, 0), 'XYZ')
 
     if len(main_child.children) < 3:
         return
