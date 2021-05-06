@@ -26,6 +26,8 @@ def main():
 
         try_fix_lod()
 
+        uv_map()
+
         # export fbx file
         bpy.ops.export_scene.fbx(filepath=str(Path(filepath).with_suffix(".fbx")),
                                     apply_scale_options="FBX_SCALE_ALL",
@@ -81,6 +83,27 @@ def apply_transform(obj, rot):
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.transform_apply(location=True, rotation=rot, scale=False)
     bpy.context.view_layer.objects.active = active
+
+
+def uv_map():
+    bpy.ops.object.select_all(action='SELECT')
+    
+    selection_names = []
+
+    for obj in bpy.context.selected_objects:
+        if obj.type == 'MESH':
+            selection_names.append(obj)
+            obj.select_set(False)
+
+    if selection_names != []:
+        for obj in selection_names:
+                bpy.context.view_layer.objects.active = obj
+                lm = obj.data.uv_layers.new(name="LightMap")
+                lm.active = True
+                bpy.ops.object.editmode_toggle()
+                bpy.ops.mesh.select_all(action='SELECT')
+                bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.0, area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
+                bpy.ops.object.editmode_toggle()
 
 
 main()
